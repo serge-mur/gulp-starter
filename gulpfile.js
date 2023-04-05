@@ -5,6 +5,7 @@ const uglify = require('gulp-uglify-es').default;
 const browserSync = require('browser-sync').create();
 const autoprefixer = require('gulp-autoprefixer');
 const clean = require('gulp-clean');
+const rename = require("gulp-rename");
 
 const path = {
 	build: {
@@ -44,9 +45,11 @@ function buildHtml() {
 }
 
 function buildScripts() {
-	return src([path.src.js])
-		.pipe(concat('script.min.js'))
-		.pipe(uglify(/* options */))
+	return src([path.src.js, 'src/js/dop.js'])
+		.pipe(concat('script.js'))
+		.pipe(dest(path.build.js))
+		.pipe(rename({suffix: '.min'}))
+		.pipe(uglify())
 		.pipe(dest(path.build.js))
 		.pipe(browserSync.stream());
 }
@@ -54,7 +57,9 @@ function buildScripts() {
 function buildStyles() {
 	return src(path.src.scss)
 		.pipe(autoprefixer({overrideBrowserslist: ['last 10 version']}))
-		.pipe(concat('style.min.css'))
+		.pipe(concat('style.css'))
+		.pipe(dest(path.build.css))
+		.pipe(rename({suffix: '.min'}))
 		.pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
 		.pipe(dest(path.build.css))
 		.pipe(browserSync.stream());
