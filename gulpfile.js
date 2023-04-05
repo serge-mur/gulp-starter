@@ -6,6 +6,11 @@ const browserSync = require('browser-sync').create();
 const autoprefixer = require('gulp-autoprefixer');
 const clean = require('gulp-clean');
 
+function cleanBuild() {
+	return src('build/', {allowEmpty: true})
+		.pipe(clean())
+}
+
 function browsersync() {
 	browserSync.init({
 		server: {
@@ -35,11 +40,6 @@ function buildStyles() {
 		.pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
 		.pipe(dest('build/css'))
 		.pipe(browserSync.stream());
-}
-
-function cleanBuild() {
-	return src('build/', {allowEmpty: true})
-		.pipe(clean())
 }
 
 function watching() {
