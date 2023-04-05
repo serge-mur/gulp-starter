@@ -6,46 +6,64 @@ const browserSync = require('browser-sync').create();
 const autoprefixer = require('gulp-autoprefixer');
 const clean = require('gulp-clean');
 
+const path = {
+	build: {
+		html: 'build/',
+		css: 'build/css/',
+		js: 'build/js/'
+	},
+	src: {
+		html: 'src/*.html',
+		scss: 'src/scss/style.scss',
+		js: 'src/js/script.js'
+	},
+	watch: {
+		html: 'src/**/*.html',
+		scss: 'src/scss/**/*.scss',
+		js: 'src/js/**/*.js'
+	}
+}
+
 function cleanBuild() {
-	return src('build/', {allowEmpty: true})
+	return src(path.build.html, {allowEmpty: true})
 		.pipe(clean())
 }
 
 function browsersync() {
 	browserSync.init({
 		server: {
-			baseDir: 'build/'
+			baseDir: path.build.html
 		}
 	});
 }
 
 function buildHtml() {
-	return src(['src/*.html'])
-		.pipe(dest('build/'))
+	return src([path.src.html])
+		.pipe(dest(path.build.html))
 		.pipe(browserSync.stream());
 }
 
 function buildScripts() {
-	return src(['src/js/script.js'])
+	return src([path.src.js])
 		.pipe(concat('script.min.js'))
 		.pipe(uglify(/* options */))
-		.pipe(dest('build/js'))
+		.pipe(dest(path.build.js))
 		.pipe(browserSync.stream());
 }
 
 function buildStyles() {
-	return src('src/scss/style.scss')
+	return src(path.src.scss)
 		.pipe(autoprefixer({overrideBrowserslist: ['last 10 version']}))
 		.pipe(concat('style.min.css'))
 		.pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
-		.pipe(dest('build/css'))
+		.pipe(dest(path.build.css))
 		.pipe(browserSync.stream());
 }
 
 function watching() {
-	watch(['src/**/*.html'], buildHtml);
-	watch(['src/scss/**/*.scss'], buildStyles);
-	watch(['src/js/**/*.js'], buildScripts);
+	watch([path.watch.html], buildHtml);
+	watch([path.watch.scss], buildStyles);
+	watch([path.watch.js], buildScripts);
 }
 
 exports.buildHtml = buildHtml;
