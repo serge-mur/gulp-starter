@@ -1,11 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    @@include('./blocks/head.html', {"title":"main page"})
+    @@include('./partials/head.html', {"title":"main page"})
 </head>
 <body>
-    <h1>test</h1>
+    <div class="header">
+        <div class="container">
+            <nav class="main-nav">
+                <ul class="main-nav__list">
+                    <li class="main-nav__item"><a href="#" class="main-nav__link main-nav__link--active">home</a></li>
+                    <li class="main-nav__item"><a href="#" class="main-nav__link">about</a></li>
+                    <li class="main-nav__item"><a href="#" class="main-nav__link">contacts</a></li>
+                </ul>
+                <a href="#" class="logo">logo</a>
+                <a href="#" class="contacts">7 777 77 77</a>                              
+            </nav>
+        </div>
+    </div>
+    <div class="main">
+        <section class="top">
+            <div class="container">
+                <h1 class="top__title">test</h1>
+                <p class="top__subtitle">Далеко-далеко за словесными горами в стране, гласных и согласных живут рыбные тексты.</p> 
+            </div>
+        </section>
 
+    </div>
+   
     <script src="js/script.min.js"></script>
 </body>
 </html>

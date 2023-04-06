@@ -1,9 +1,41 @@
 body {
     padding: 0;
     margin: 0;
-    background-color: aquamarine;
-    color: black;
-    main {
-        background-color: #ccc;    
+    background-color: #fff;
+    color: #666;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+.header {
+    height: 50px;
+}
+.main-nav {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    &__list {
+        display: flex;
+    }
+    &__item {
+
+    }
+    &__link {
+
+    }
+}
+.top {
+    min-height: calc(100vh - 50px);
+    background: url(../img/back.webp) center no-repeat;
+    background-size: cover;
+    &__title {
+        font-size: 64px;
+        background: linear-gradient(180deg, red 0%, yellow 100%);
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    &__subtitle {
+        font-size: 16px;
     }
 }

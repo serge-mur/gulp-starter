@@ -51,7 +51,7 @@ function buildHtml() {
 function buildStyles() {
 	return src(path.src.scss)
 		.pipe(sass({outputStyle: 'expanded'}).on('error', sass.logError))
-		.pipe(autoprefixer({overrideBrowserslist: ['last 10 version']}))
+		.pipe(autoprefixer())
 		.pipe(concat('style.css'))
 		.pipe(dest(path.build.css))
 		.pipe(rename({suffix: '.min'}))
