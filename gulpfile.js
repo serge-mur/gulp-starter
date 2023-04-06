@@ -1,27 +1,38 @@
 const {src, dest, watch, parallel, series} = require('gulp');
-const sass = require('gulp-sass')(require('sass'));
-const concat = require('gulp-concat');
-const uglify = require('gulp-uglify-es').default;
 const browserSync = require('browser-sync').create();
-const autoprefixer = require('gulp-autoprefixer');
 const clean = require('gulp-clean');
 const rename = require("gulp-rename");
+// html
+const fileinclude = require('gulp-file-include');
+// css
+const sass = require('gulp-sass')(require('sass'));
+const autoprefixer = require('gulp-autoprefixer');
+const cleanCSS = require('gulp-clean-css');
+// js
+const concat = require('gulp-concat');
+const uglify = require('gulp-uglify-es').default;
+// img
+const imagemin = require("gulp-imagemin");
+const webp = require('gulp-webp');
 
 const path = {
 	build: {
 		html: 'build/',
 		css: 'build/css/',
-		js: 'build/js/'
+		js: 'build/js/',
+		img: 'build/img/'
 	},
 	src: {
 		html: 'src/*.html',
-		scss: 'src/scss/style.scss',
-		js: 'src/js/script.js'
+		scss: 'src/scss/*.scss',
+		js: 'src/js/*.js',
+		img: 'src/img/**/*.{jpg,jpeg,png,gif,svg}'
 	},
 	watch: {
 		html: 'src/**/*.html',
 		scss: 'src/scss/**/*.scss',
-		js: 'src/js/**/*.js'
+		js: 'src/js/**/*.js',
+		img: 'src/img/**/*.{jpg,jpeg,png,gif,svg}'
 	}
 }
 
@@ -30,17 +41,22 @@ function cleanBuild() {
 		.pipe(clean())
 }
 
-function browsersync() {
-	browserSync.init({
-		server: {
-			baseDir: path.build.html
-		}
-	});
-}
-
 function buildHtml() {
 	return src([path.src.html])
+		.pipe(fileinclude())
 		.pipe(dest(path.build.html))
+		.pipe(browserSync.stream());
+}
+
+function buildStyles() {
+	return src(path.src.scss)
+		.pipe(sass({outputStyle: 'expanded'}).on('error', sass.logError))
+		.pipe(autoprefixer({overrideBrowserslist: ['last 10 version']}))
+		.pipe(concat('style.css'))
+		.pipe(dest(path.build.css))
+		.pipe(rename({suffix: '.min'}))
+		.pipe(cleanCSS())
+		.pipe(dest(path.build.css))
 		.pipe(browserSync.stream());
 }
 
@@ -54,27 +70,33 @@ function buildScripts() {
 		.pipe(browserSync.stream());
 }
 
-function buildStyles() {
-	return src(path.src.scss)
-		.pipe(autoprefixer({overrideBrowserslist: ['last 10 version']}))
-		.pipe(concat('style.css'))
-		.pipe(dest(path.build.css))
-		.pipe(rename({suffix: '.min'}))
-		.pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
-		.pipe(dest(path.build.css))
-		.pipe(browserSync.stream());
+function buildImages() {
+	return src(path.src.img)
+		.pipe(imagemin())
+		.pipe(webp())
+		.pipe(dest(path.build.img))
+}
+
+function browsersync() {
+	browserSync.init({
+		server: {
+			baseDir: path.build.html
+		}
+	});
 }
 
 function watching() {
 	watch([path.watch.html], buildHtml);
 	watch([path.watch.scss], buildStyles);
 	watch([path.watch.js], buildScripts);
+	watch([path.watch.img], buildImages);
 }
 
 exports.buildHtml = buildHtml;
 exports.buildStyles = buildStyles;
 exports.buildScripts = buildScripts;
-exports.watching = watching;
+exports.buildImages = buildImages;
 exports.browsersync = browsersync;
+exports.watching = watching;
 
-exports.default = series(cleanBuild, buildHtml, buildStyles, buildScripts, parallel(browsersync, watching));
+exports.default = series(cleanBuild, parallel(buildHtml, buildStyles, buildScripts, buildImages), parallel(browsersync, watching));
