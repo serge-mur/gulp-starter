@@ -1,0 +1,17 @@
+/* header */
+.header {
+    height: 50px;
+}
+.nav {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    &__list {
+        display: flex;
+    }
+    &__item {
+
+    }
+    &__link {
+
+    }
+}

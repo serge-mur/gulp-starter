@@ -2,6 +2,7 @@ const {src, dest, watch, parallel, series} = require('gulp');
 const browserSync = require('browser-sync').create();
 const clean = require('gulp-clean');
 const rename = require("gulp-rename");
+const sourcemaps = require('gulp-sourcemaps');
 // html
 const fileinclude = require('gulp-file-include');
 // css
@@ -50,22 +51,26 @@ function buildHtml() {
 
 function buildStyles() {
 	return src(path.src.scss)
+		.pipe(sourcemaps.init())
 		.pipe(sass({outputStyle: 'expanded'}).on('error', sass.logError))
 		.pipe(autoprefixer())
 		.pipe(concat('style.css'))
 		.pipe(dest(path.build.css))
 		.pipe(rename({suffix: '.min'}))
 		.pipe(cleanCSS())
+		.pipe(sourcemaps.write())
 		.pipe(dest(path.build.css))
 		.pipe(browserSync.stream());
 }
 
 function buildScripts() {
-	return src([path.src.js, 'src/js/dop.js'])
+	return src([path.src.js, 'src/js/vendor/vendor.js'])
+		.pipe(sourcemaps.init())
 		.pipe(concat('script.js'))
 		.pipe(dest(path.build.js))
 		.pipe(rename({suffix: '.min'}))
 		.pipe(uglify())
+		.pipe(sourcemaps.write())
 		.pipe(dest(path.build.js))
 		.pipe(browserSync.stream());
 }
@@ -73,7 +78,7 @@ function buildScripts() {
 function buildImages() {
 	return src(path.src.img)
 		.pipe(imagemin())
-		.pipe(webp())
+		// .pipe(webp())
 		.pipe(dest(path.build.img))
 }
 

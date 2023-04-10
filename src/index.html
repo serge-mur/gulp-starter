@@ -1,22 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="page" lang="ru">
 <head>
     @@include('./partials/head.html', {"title":"main page"})
 </head>
-<body>
-    <div class="header">
-        <div class="container">
-            <nav class="main-nav">
-                <ul class="main-nav__list">
-                    <li class="main-nav__item"><a href="#" class="main-nav__link main-nav__link--active">home</a></li>
-                    <li class="main-nav__item"><a href="#" class="main-nav__link">about</a></li>
-                    <li class="main-nav__item"><a href="#" class="main-nav__link">contacts</a></li>
-                </ul>
-                <a href="#" class="logo">logo</a>
-                <a href="#" class="contacts">7 777 77 77</a>                              
-            </nav>
-        </div>
-    </div>
+<body class="page__body">
+
+    @@include('./partials/header.html')
+
     <div class="main">
         <section class="top">
             <div class="container">
@@ -26,7 +16,9 @@
         </section>
 
     </div>
-   
+
+    @@include('./partials/footer.html')
+    
     <script src="js/script.min.js"></script>
 </body>
 </html>
