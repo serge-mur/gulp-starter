@@ -1,0 +1,33 @@
+.top {
+    min-height: 100vh;
+    background: url(../img/back.jpg) center no-repeat;
+    background-size: cover;
+    padding-top: 50px;
+    &__title {
+        font-size: 64px;
+        background: linear-gradient(180deg, red 0%, yellow 100%);
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    &__subtitle {
+        font-size: 16px;
+    }
+}
+
+.features {
+    &__title {
+        color: red;
+    }    
+    &__content {
+        font-size: 18px;
+        margin-bottom: 24px;
+    }    
+    &__list {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+    &__item {
+        background-color: red;
+    }
+}
