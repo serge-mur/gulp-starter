@@ -15,25 +15,29 @@ const uglify = require('gulp-uglify-es').default;
 // img
 const imagemin = require("gulp-imagemin");
 const webp = require('gulp-webp');
+const imageminSvgo = require('imagemin-svgo');
 
 const path = {
 	build: {
 		html: 'build/',
 		css: 'build/css/',
 		js: 'build/js/',
-		img: 'build/img/'
+		img: 'build/img/',
+		fonts: 'build/fonts'
 	},
 	src: {
 		html: 'src/*.html',
 		scss: 'src/scss/*.scss',
 		js: 'src/js/*.js',
-		img: 'src/img/**/*.{jpg,jpeg,png,gif,svg}'
+		img: 'src/img/**/*.{jpg,jpeg,png,gif,svg}',
+		fonts: 'src/fonts/**/*.woff2'
 	},
 	watch: {
 		html: 'src/**/*.html',
 		scss: 'src/scss/**/*.scss',
 		js: 'src/js/**/*.js',
-		img: 'src/img/**/*.{jpg,jpeg,png,gif,svg}'
+		img: 'src/img/**/*.{jpg,jpeg,png,gif,svg}',
+		fonts: 'src/fonts/**/*.woff2'
 	}
 }
 
@@ -77,9 +81,26 @@ function buildScripts() {
 
 function buildImages() {
 	return src(path.src.img)
-		.pipe(imagemin())
+		.pipe(imagemin([
+			imageminSvgo([
+				{ removeViewBox: false },
+				{ removeUnusedNS: false },
+				{ removeUselessStrokeAndFill: true },
+				{ cleanupIDs: false },
+				{ removeComments: true },
+				{ removeEmptyAttrs: true },
+				{ removeEmptyText: true },
+				{ collapseGroups: true },
+				{ removeAttrs: { attrs: '(fill|stroke|style)' } }
+			  ])
+		]))
 		// .pipe(webp())
 		.pipe(dest(path.build.img))
+}
+
+function copyFonts() {
+	return src(path.src.fonts)
+		.pipe(dest(path.build.fonts));
 }
 
 function browsersync() {
@@ -95,13 +116,15 @@ function watching() {
 	watch([path.watch.scss], buildStyles);
 	watch([path.watch.js], buildScripts);
 	watch([path.watch.img], buildImages);
+	watch([path.watch.fonts], buildImages);
 }
 
 exports.buildHtml = buildHtml;
 exports.buildStyles = buildStyles;
 exports.buildScripts = buildScripts;
 exports.buildImages = buildImages;
+exports.copyFonts = copyFonts;
 exports.browsersync = browsersync;
 exports.watching = watching;
 
-exports.default = series(cleanBuild, parallel(buildHtml, buildStyles, buildScripts, buildImages), parallel(browsersync, watching));
+exports.default = series(cleanBuild, parallel(buildHtml, buildStyles, buildScripts, buildImages, copyFonts), parallel(browsersync, watching));

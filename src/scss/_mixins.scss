@@ -1,8 +1,71 @@
+/* 
+100 - Thin (Hairline)
+200 - Extra Light (Ultra Light)
+300 - Light
+400 - Regular (Normal)
+500 - Medium
+600 - Semi Bold (Demi Bold)
+700 - Bold
+800 - Extra Bold (Ultra Bold)
+900 - Black (Heavy) 
+*/
 @mixin font($fname, $fstyle, $fweight, $furl) {
     @font-face {
         font-family: $fname;
         font-style: $fstyle;
         font-weight: $fweight;
         src: url($furl) format('woff2');
+    }
+}
+
+
+/* 
+
+Using min-width
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) { ... }
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) { ... }
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) { ... }
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) { ... }
+
+Using max-width
+
+@media (max-width: 575.98px) { ... }
+
+// Small devices (landscape phones, less than 768px)
+@media (max-width: 767.98px) { ... }
+
+// Medium devices (tablets, less than 992px)
+@media (max-width: 991.98px) { ... }
+
+// Large devices (desktops, less than 1200px)
+@media (max-width: 1199.98px) { ... } 
+
+*/
+
+@mixin min-width($breakpoint) {
+    @each $breakpoints, $size in $media {
+        @if $breakpoint==$breakpoints {
+            @media screen and (min-width: $size) {
+                @content;
+            }
+        }
+    }
+}
+
+@mixin max-width($breakpoint) {
+    @each $breakpoints, $size in $media {
+        @if $breakpoint==$breakpoints {
+            @media screen and (max-width: ($size - 0.02px)) {
+                @content;
+            }
+        }
     }
 }

@@ -3,14 +3,24 @@
     background: url(../img/back.jpg) center no-repeat;
     background-size: cover;
     padding-top: 50px;
+    display: flex;
+    align-items: center;    
     &__title {
-        font-size: 64px;
-        background: linear-gradient(180deg, red 0%, yellow 100%);
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
+        font-family: 'roboto-bold';
+        font-size: 32px;
+        text-transform: uppercase;
+        color: #fff;
+        @include min-width(sm) {
+            font-size: 64px;
+        }
     }
     &__subtitle {
+        color: white;
+        max-width: 60%;
         font-size: 16px;
+        @include max-width(sm) {
+            max-width: 100%;
+        }
     }
 }
 
@@ -19,7 +29,6 @@
         color: red;
     }    
     &__content {
-        font-size: 18px;
         margin-bottom: 24px;
     }    
     &__list {
