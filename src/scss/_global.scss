@@ -51,9 +51,24 @@ img {
     background-color: red;
     color: white;
     padding: 5px 10px;
-    border-radius: 3px;
+    border: 1px solid red;
+    border-radius: 10px;
     font-family: var(--font-family);
     font-size: 18px;
+    transition: background-color .5s, color .5s, border-color .5s;
+    &:focus {
+        background-color: white;
+        color: red;        
+    }    
+    &:hover {
+        background-color: white;
+        color: red;
+    }
+    &:active {
+        background-color: yellow;
+        color: white;
+        border-color: yellow;
+    }
 }
 
 .main {
@@ -68,9 +83,6 @@ img {
 
 /* header */
 .header {
-    position: fixed;
-    width: 100%;
-    z-index: 10;
     background-color: rgba(0, 0, 0, .5);
     &__inner {
         height: 50px;
@@ -81,18 +93,29 @@ img {
     &__contacts {
         color: white;
     }
+    &--position {
+        position: fixed;
+        width: 100%;
+        z-index: 10;        
+    }
 }
 .menu {
     &__list {
         display: flex;
         gap: 30px;
     }
-    &__item {}
     &__link {
         color: white;
         text-transform: uppercase;
+        transition: color .5s;
+        &:focus {
+            color: yellow;
+        }        
         &:hover {
             color: yellow;
+        }
+        &:active {
+            color: red;
         }
         &--active {
             color: yellow;
